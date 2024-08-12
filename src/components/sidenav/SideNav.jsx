@@ -39,7 +39,7 @@ const SideNav = ({ spotifyApi, token }) => {
 			}}
 		>
 			<Box p={3}>
-				<img src="Spotify_Logo.png" alt="Spotify Logo" width={'75%'} />
+				<img src="Spotify_Logo.png" width={'75%'} />
 			</Box>
 			<NavItem name="Home" Icon={HomeIcon} target="/" />
 			<Box px={3} py={1}>
