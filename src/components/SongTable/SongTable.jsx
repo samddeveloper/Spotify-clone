@@ -1,6 +1,27 @@
-import { Box, Grid } from '@mui/material';
+import { Box, Divider, Grid } from '@mui/material';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import SongRow from '../SongRow/SongRow';
 
-const SongTable = ({}) => {
+const SongTable = ({ songs, loading, spotifyApi }) => {
+	console.log({ songs, loading, spotifyApi });
+
+	const renderSongs = () => {
+		if (loading) {
+			return [1, 2, 3, 4, 5].map((e, i) => <SongRow loading={loading} key={i} i={i} images={null} />);
+		}
+
+		return songs.map((songs, i) => (
+			<SongRow
+				album={songs.album.name}
+				images={songs.album.images}
+				title={songs.name}
+				artist={songs.artists[0].name}
+				duration={songs.duration_ms / 1000}
+				key={i}
+				i={i}
+			/>
+		));
+	};
 	return (
 		<Box
 			p={{ xs: 3, md: 4 }}
@@ -22,9 +43,13 @@ const SongTable = ({}) => {
 					Album
 				</Grid>
 				<Grid xs={3} item sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-					Icon
+					<AccessTimeIcon sx={{ width: 20, height: 20 }} />
 				</Grid>
 			</Grid>
+			<Box pb={2}>
+				<Divider sx={{ width: '100%', height: 1 }} />
+			</Box>
+			{renderSongs()}
 		</Box>
 	);
 };
