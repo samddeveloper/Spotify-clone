@@ -1,8 +1,26 @@
 import { Avatar, Box, Grid, Typography, Skeleton } from '@mui/material';
-const SongRow = ({ images, title, artist, album, duration, i, loading }) => {
+import { formatTime } from '../../utils/formatTime';
+
+const SongRow = ({ images, title, artist, album, duration, i, loading, spotifyApi, contextUri, position }) => {
 	const image = images?.length > 0 ? images[0].url : null;
+
+	const onRowClick = async () => {
+		const song = {
+			context_uri: contextUri,
+			offset: { position },
+			position_ms: 0,
+			title,
+			image: image ? image : {},
+			artist,
+			duration,
+			position
+		};
+		await spotifyApi.play(song);
+	};
+
 	return (
 		<Grid
+			onClick={onRowClick}
 			container
 			px={2}
 			p={1}
@@ -36,7 +54,7 @@ const SongRow = ({ images, title, artist, album, duration, i, loading }) => {
 				{loading ? <Skeleton variant="text" width={50} height={24} /> : album}
 			</Grid>
 			<Grid xs={3} item sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-				{loading ? <Skeleton variant="text" width={50} height={18} /> : duration}
+				{loading ? <Skeleton variant="text" width={50} height={18} /> : formatTime(duration)}
 			</Grid>
 		</Grid>
 	);

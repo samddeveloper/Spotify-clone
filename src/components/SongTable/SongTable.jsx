@@ -7,18 +7,21 @@ const SongTable = ({ songs, loading, spotifyApi }) => {
 
 	const renderSongs = () => {
 		if (loading) {
-			return [1, 2, 3, 4, 5].map((e, i) => <SongRow loading={loading} key={i} i={i} images={null} />);
+			return [1, 2, 3, 4, 5].map((_, i) => <SongRow loading={loading} key={i} i={i} images={null} />);
 		}
 
-		return songs.map((songs, i) => (
+		return songs.map((song, i) => (
 			<SongRow
-				album={songs.album.name}
-				images={songs.album.images}
-				title={songs.name}
-				artist={songs.artists[0].name}
-				duration={songs.duration_ms / 1000}
+				album={song.album.name}
+				images={song.album.images}
+				title={song.name}
+				artist={song.artists[0].name}
+				duration={song.duration_ms / 1000}
 				key={i}
 				i={i}
+				position={song.position}
+				contextUri={song.contextUri}
+				spotifyApi={spotifyApi}
 			/>
 		));
 	};

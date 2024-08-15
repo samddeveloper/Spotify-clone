@@ -13,7 +13,7 @@ const Playlist = ({ spotifyApi, token }) => {
 		(items) =>
 			items.map((item, i) => {
 				const { track } = item;
-				track.contextUri = `Spootify:playlist:${id}`;
+				track.contextUri = `spotify:playlist:${id}`;
 				track.position = i;
 				return track;
 			}),
