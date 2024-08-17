@@ -9,6 +9,7 @@ const Player = ({ spotifyApi, token }) => {
 	const [device, setDevice] = useState();
 	const [duration, setDuration] = useState();
 	const [progress, setProgress] = useState();
+	const [active, setActive] = useState();
 
 	useEffect(() => {
 		const script = document.createElement('script');
@@ -19,7 +20,7 @@ const Player = ({ spotifyApi, token }) => {
 
 		window.onSpotifyWebPlaybackSDKReady = () => {
 			const player = new window.Spotify.Player({
-				name: 'Sammie Player',
+				name: 'Spotify clone',
 				getOAuthToken: (cb) => {
 					cb(token);
 				},
@@ -49,6 +50,10 @@ const Player = ({ spotifyApi, token }) => {
 				setProgress(progress);
 				setIsPaused(state.paused);
 				setCurrentTrack(state.track_window.current_track);
+
+				player.getCurrentState().then((state) => {
+					!state ? setActive(false) : setActive(true);
+				});
 			});
 
 			player.connect();
@@ -67,17 +72,17 @@ const Player = ({ spotifyApi, token }) => {
 		};
 	}, [localPlayer]);
 
-	useEffect(() => {
-		const transferPlayback = async () => {
-			if (device) {
-				const res = await spotifyApi.getMyDevices();
-				console.log(res);
-				await spotifyApi.transferMyPlayback([device], false);
-			}
-		};
+	// useEffect(() => {
+	// 	const transferPlayback = async () => {
+	// 		if (device) {
+	// 			const res = await spotifyApi.getMyDevices();
+	// 			console.log(res);
+	// 			await spotifyApi.transferMyPlayback([device], false);
+	// 		}
+	// 	};
 
-		transferPlayback();
-	}, [device, spotifyApi]);
+	// 	transferPlayback();
+	// }, [device, spotifyApi]);
 
 	return (
 		<Box>
@@ -111,12 +116,16 @@ const Player = ({ spotifyApi, token }) => {
 					md={4}
 					item
 				>
-					<PlayerControls
-						progress={progress}
-						is_paused={is_paused}
-						duration={duration}
-						player={localPlayer}
-					/>
+					{active ? (
+						<PlayerControls
+							progress={progress}
+							is_paused={is_paused}
+							duration={duration}
+							player={localPlayer}
+						/>
+					) : (
+						<Box>Please transfer playback</Box>
+					)}
 				</Grid>
 				<Grid xs={6} md={4} item sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
 					volume
