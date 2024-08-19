@@ -1,6 +1,8 @@
 import { Box, Grid, Typography, Avatar } from '@mui/material';
 import { useEffect, useState } from 'react';
 import PlayerControls from '../PlayerControls/PlayerControls';
+import PlayerVolume from '../PlayerVolume/PlayerVolume';
+import PlayerOverlay from '../PlayerOverlay/PlayerOverlay';
 
 const Player = ({ spotifyApi, token }) => {
 	const [localPlayer, setLocalPlayer] = useState();
@@ -10,6 +12,7 @@ const Player = ({ spotifyApi, token }) => {
 	const [duration, setDuration] = useState();
 	const [progress, setProgress] = useState();
 	const [active, setActive] = useState();
+	const [playerOverlayIsOpen, setplayerOverlayIsOpen] = useState(false);
 
 	useEffect(() => {
 		const script = document.createElement('script');
@@ -20,7 +23,7 @@ const Player = ({ spotifyApi, token }) => {
 
 		window.onSpotifyWebPlaybackSDKReady = () => {
 			const player = new window.Spotify.Player({
-				name: 'Spotify clone',
+				name: 'Player clone',
 				getOAuthToken: (cb) => {
 					cb(token);
 				},
@@ -87,6 +90,7 @@ const Player = ({ spotifyApi, token }) => {
 	return (
 		<Box>
 			<Grid
+				onClick={() => setplayerOverlayIsOpen((prevstate) => !prevstate)}
 				container
 				px={3}
 				sx={{
@@ -127,10 +131,25 @@ const Player = ({ spotifyApi, token }) => {
 						<Box>Please transfer playback</Box>
 					)}
 				</Grid>
-				<Grid xs={6} md={4} item sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-					volume
+				<Grid
+					xs={6}
+					md={4}
+					item
+					sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', justifyContent: 'flex-end' }}
+				>
+					<PlayerVolume player={localPlayer} />
 				</Grid>
 			</Grid>
+			<PlayerOverlay
+				playerOverlayIsOpen={playerOverlayIsOpen}
+				closeOverlay={() => setplayerOverlayIsOpen(false)}
+				progress={progress}
+				is_paused={is_paused}
+				duration={duration}
+				player={localPlayer}
+				current_track={current_track}
+				active={active}
+			/>
 		</Box>
 	);
 };
