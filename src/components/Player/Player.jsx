@@ -75,17 +75,17 @@ const Player = ({ spotifyApi, token }) => {
 		};
 	}, [localPlayer]);
 
-	// useEffect(() => {
-	// 	const transferPlayback = async () => {
-	// 		if (device) {
-	// 			const res = await spotifyApi.getMyDevices();
-	// 			console.log(res);
-	// 			await spotifyApi.transferMyPlayback([device], false);
-	// 		}
-	// 	};
+	useEffect(() => {
+		const transferPlayback = async () => {
+			if (device) {
+				const res = await spotifyApi.getMyDevices();
+				console.log(res);
+				await spotifyApi.transferMyPlayback([device], false);
+			}
+		};
 
-	// 	transferPlayback();
-	// }, [device, spotifyApi]);
+		transferPlayback();
+	}, [device, spotifyApi]);
 
 	return (
 		<Box>
