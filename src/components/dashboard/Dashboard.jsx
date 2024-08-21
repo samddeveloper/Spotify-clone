@@ -26,10 +26,10 @@ const Dashboard = ({ spotifyApi }) => {
 		<Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
 			{!loading && (
 				<Box sx={{ flex: 1, overflowY: 'auto', display: 'flex' }}>
-					<SideNav spotifyApi={spotifyApi} token={null} />
+					<SideNav spotifyApi={spotifyApi} token={token} />
 					<Routes>
-						<Route path="playlist/:id" element={<Playlist spotifyApi={spotifyApi} token={null} />} />
-						<Route path="/library" element={<Library spotifyApi={spotifyApi} token={null} />} />
+						<Route path="playlist/:id" element={<Playlist spotifyApi={spotifyApi} token={token} />} />
+						<Route path="/library" element={<Library spotifyApi={spotifyApi} token={token} />} />
 						<Route path="/" element={<Home />} />
 					</Routes>
 				</Box>
