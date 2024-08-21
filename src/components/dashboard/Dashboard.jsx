@@ -11,10 +11,12 @@ import Library from '../../pages/Library';
 
 const Dashboard = ({ spotifyApi }) => {
 	const [token, setToken] = useState(getAccessTokenFromStorage());
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		async function onMount() {
 			await spotifyApi.setAccessToken(token);
+			setLoading(false);
 		}
 
 		if (token) onMount();
@@ -22,15 +24,18 @@ const Dashboard = ({ spotifyApi }) => {
 
 	return (
 		<Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-			<Box sx={{ flex: 1, overflowY: 'auto', display: 'flex' }}>
-				<SideNav spotifyApi={spotifyApi} token={null} />
-				<Routes>
-					<Route path="playlist/:id" element={<Playlist spotifyApi={spotifyApi} token={null} />} />
-					<Route path="/library" element={<Library spotifyApi={spotifyApi} token={null} />} />
-					<Route path="/" element={<Home />} />
-				</Routes>
-			</Box>
-			{token && <Player spotifyApi={spotifyApi} token={token} />}
+			{!loading && (
+				<Box sx={{ flex: 1, overflowY: 'auto', display: 'flex' }}>
+					<SideNav spotifyApi={spotifyApi} token={null} />
+					<Routes>
+						<Route path="playlist/:id" element={<Playlist spotifyApi={spotifyApi} token={null} />} />
+						<Route path="/library" element={<Library spotifyApi={spotifyApi} token={null} />} />
+						<Route path="/" element={<Home />} />
+					</Routes>
+				</Box>
+			)}
+
+			{token && !loading && <Player spotifyApi={spotifyApi} token={token} />}
 			<MobileNav />
 		</Box>
 	);
